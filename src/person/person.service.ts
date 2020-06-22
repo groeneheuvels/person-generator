@@ -33,7 +33,7 @@ export class PersonService {
   }
 
   private getRandomGender(): Gender {
-    const genders: Gender[] = ['female', 'male', 'other'];
+    const genders: Gender[] = ['female', 'male'];
     return this.getRandomElementFromArray(genders);
   }
 
