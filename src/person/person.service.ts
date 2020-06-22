@@ -11,7 +11,16 @@ export class PersonService {
     }
     const persons = [];
     for (let i = 0; i < numberOfPersons; i++) {
-      const newPerson = { lastName: this.getRandomLastName() };
+      const gender = this.getRandomGender();
+      const birthdate = this.getRandomBirthdate();
+      const newPerson = {
+        firstName: this.getRandomFirstName(gender),
+        lastName: this.getRandomLastName(),
+        birthdate: birthdate,
+        age: this.getAge(birthdate),
+        gender: gender,
+      };
+
       persons.push(newPerson);
     }
     console.log('persons:', persons);
@@ -24,7 +33,8 @@ export class PersonService {
   }
 
   private getRandomGender(): Gender {
-    return 'female';
+    const genders: Gender[] = ['female', 'male', 'other'];
+    return this.getRandomElementFromArray(genders);
   }
 
   private getRandomLastName(): string {
@@ -40,11 +50,22 @@ export class PersonService {
     return;
   }
 
+  private randomDate(date1: Date, date2: Date) {
+    function randomValueBetween(min: number, max: number) {
+      return Math.random() * (max - min) + min;
+    }
+    return new Date(randomValueBetween(date2.getTime(), date1.getTime()));
+  }
+
   private getRandomBirthdate(): Date {
-    return;
+    const now = new Date();
+    const hundredYearsAgo = new Date(now.getFullYear() - 100, now.getMonth());
+    return this.randomDate(now, hundredYearsAgo);
   }
 
   private getAge(birthdate: Date): number {
-    return;
+    const ageDifMs = Date.now() - birthdate.getTime();
+    const ageDate = new Date(ageDifMs); // miliseconds from epoch
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
   }
 }
