@@ -6,7 +6,9 @@ import { FIRST_NAMES } from './first-names.const';
 
 @Injectable()
 export class PersonService {
-  public generatePersons(numberOfPersons = 5): any[] {
+  filteredFirstNames = {};
+
+  public generatePersons(numberOfPersons = 100): any[] {
     if (numberOfPersons > 200) {
       throw new BadRequestException('Max 200');
     }
@@ -45,13 +47,15 @@ export class PersonService {
 
   private getRandomFirstName(gender: Gender): string {
     const allFirstNames = FIRST_NAMES;
-    const filteredFirstNames = allFirstNames.filter(
-      firstName => firstName.gender === gender,
-    );
+    if (!this.filteredFirstNames[gender]) {
+      this.filteredFirstNames[gender] = allFirstNames.filter(
+        firstName => firstName.gender === gender,
+      );
+    }
     const selectedNameObject = this.getRandomElementFromArray(
-      filteredFirstNames,
+      this.filteredFirstNames[gender],
     );
-    let selectedFirstName = selectedNameObject.name;
+    const selectedFirstName = selectedNameObject.name;
     return selectedFirstName;
   }
 
