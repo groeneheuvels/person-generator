@@ -2,6 +2,7 @@ import { Injectable, BadRequestException } from '@nestjs/common';
 import { Person } from './person.interface';
 import { Gender } from './gender.type';
 import { LAST_NAMES } from './family-names.const';
+import { FIRST_NAMES } from './first-names.const';
 
 @Injectable()
 export class PersonService {
@@ -43,7 +44,15 @@ export class PersonService {
   }
 
   private getRandomFirstName(gender: Gender): string {
-    return;
+    const allFirstNames = FIRST_NAMES;
+    const filteredFirstNames = allFirstNames.filter(
+      firstName => firstName.gender === gender,
+    );
+    const selectedNameObject = this.getRandomElementFromArray(
+      filteredFirstNames,
+    );
+    let selectedFirstName = selectedNameObject.name;
+    return selectedFirstName;
   }
 
   private getRandomAddress(): string {

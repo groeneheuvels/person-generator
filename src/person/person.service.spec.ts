@@ -16,6 +16,10 @@ describe('PersonService', () => {
     expect(Array.isArray(personService.generatePersons(1))).toBe(true);
   });
 
+  it('should return the correct number of persons', () => {
+    expect(personService.generatePersons(100).length).toBe(100);
+  });
+
   it('should return persons with a last name', () => {
     expect(
       LAST_NAMES.indexOf(personService.generatePersons()[0].lastName),
