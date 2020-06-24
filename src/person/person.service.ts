@@ -3,6 +3,8 @@ import { Person } from './person.interface';
 import { Gender } from './gender.type';
 import { LAST_NAMES } from './family-names.const';
 import { FIRST_NAMES } from './first-names.const';
+import { STREETS } from './streets.const';
+import { CITY } from './city.const';
 
 @Injectable()
 export class PersonService {
@@ -16,11 +18,17 @@ export class PersonService {
     for (let i = 0; i < numberOfPersons; i++) {
       const gender = this.getRandomGender();
       const birthdate = this.getRandomBirthdate();
+      const firstName = this.getRandomFirstName(gender);
+      const lastName = this.getRandomLastName();
       const newPerson = {
-        firstName: this.getRandomFirstName(gender),
-        lastName: this.getRandomLastName(),
+        firstName: firstName,
+        lastName: lastName,
         birthdate: birthdate,
         age: this.getAge(birthdate),
+        email: this.getRandomEmail(firstName, lastName),
+        address: this.getRandomAddress(),
+        zip: this.getRandomZipcode(),
+        city: this.getRandomCity(),
         gender: gender,
       };
 
@@ -60,7 +68,76 @@ export class PersonService {
   }
 
   private getRandomAddress(): string {
-    return;
+    const streetNames = STREETS;
+    const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+    const currentAddress =
+      this.getRandomElementFromArray(streetNames) +
+      ' ' +
+      this.getRandomElementFromArray(numbers);
+    return currentAddress;
+  }
+
+  private getRandomCity(): string {
+    const allCities = CITY;
+    return this.getRandomElementFromArray(allCities);
+  }
+
+  private getRandomEmail(firstName, lastName): string {
+    const providerArray = [
+      '@gmail.com',
+      '@hotmail.com',
+      '@live.com',
+      '@outlook.com',
+    ];
+    const punctuations = ['-', '.', '_'];
+    const emailAddress =
+      firstName +
+      this.getRandomElementFromArray(punctuations) +
+      lastName.replace(/\s/g, '') +
+      this.getRandomElementFromArray(providerArray);
+    return emailAddress;
+  }
+
+  private getRandomZipcode(): string {
+    function getRandomInt(min, max) {
+      min = Math.ceil(min);
+      max = Math.floor(max);
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    const alphabetArray = [
+      'A',
+      'B',
+      'C',
+      'D',
+      'E',
+      'F',
+      'G',
+      'H',
+      'I',
+      'J',
+      'K',
+      'L',
+      'M',
+      'N',
+      'O',
+      'P',
+      'Q',
+      'R',
+      'S',
+      'T',
+      'U',
+      'V',
+      'W',
+      'X',
+      'Y',
+      'Z',
+    ];
+    const currentZipCode =
+      getRandomInt(1000, 1999) +
+      ' ' +
+      this.getRandomElementFromArray(alphabetArray) +
+      this.getRandomElementFromArray(alphabetArray);
+    return currentZipCode;
   }
 
   private randomDate(date1: Date, date2: Date) {
